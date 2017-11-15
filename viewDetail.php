@@ -43,7 +43,7 @@ if (	$rs=mysqli_fetch_array($results)) {
 	"</td><td>" , $rs['msg'],
 	"<td>", $rs['author'],
 	"<td>", $rs['name'],
-	"<td>(", $rs['push'], ")</td></td></tr>";
+	"<td>(", $rs['push'], ")</td></td></tr></table>";
 }
 
 echo "<hr>";

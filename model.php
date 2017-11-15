@@ -90,7 +90,7 @@ function insertComment($bkID, $msg, $uID) {
 function getComment($bkID) {
 	global $conn;
 	//$sql = "select * from guestbook;";
-	$sql = "select comment.*, user.name as userName from comment, user where comment.uID=user.id";
+	$sql = "select comment.*, user.name as userName from comment, user where comment.uID=user.id and comment.bkID=$bkID";
 
 	return mysqli_query($conn, $sql);
 }
