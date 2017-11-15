@@ -37,7 +37,7 @@ function insertBook($title='', $msg='', $author='', $uID) {
 	} else return false;
 }
 
-function getMsg($id) {
+function getBookDetail($id) {
 	global $conn;
 	if($id >0 ) {
 		$sql = "select book.*, user.name from book, user where book.uID=user.id and book.id=$id;";
@@ -85,5 +85,13 @@ function insertComment($bkID, $msg, $uID) {
 		$sql = "insert into comment (bkID, msg, uID) values ($bkID, '$msg',$uID);";
 		return mysqli_query($conn, $sql); //執行SQL
 	} else return false;
+}
+
+function getComment($bkID) {
+	global $conn;
+	//$sql = "select * from guestbook;";
+	$sql = "select comment.*, user.name as userName from comment, user where comment.uID=user.id";
+
+	return mysqli_query($conn, $sql);
 }
 ?>

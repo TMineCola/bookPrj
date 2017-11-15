@@ -29,7 +29,7 @@ if ( ! isset($_SESSION['uID']) or $_SESSION['uID'] <= 0) {
    <td>Likes</td>
   </tr>
 <?php
-require_once("model.php");
+require("model.php");
 $results=getBookList();
 
 while (	$rs=mysqli_fetch_array($results)) {

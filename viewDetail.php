@@ -29,9 +29,9 @@ if ( ! isset($_SESSION['uID']) or $_SESSION['uID'] <= 0) {
    <td>Likes</td>
   </tr>
 <?php
-require_once("model.php");
-$bkID=$_REQUEST['id'];
-$results=getBookDtail($bkID);
+require("model.php");
+$bkID=(int)$_REQUEST['id'];
+$results = getBookDetail($bkID);
 
 if (	$rs=mysqli_fetch_array($results)) {
 
