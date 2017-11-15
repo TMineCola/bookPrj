@@ -94,4 +94,15 @@ function getComment($bkID) {
 
 	return mysqli_query($conn, $sql);
 }
+
+function deleteComment($id) {
+	global $conn;
+
+	//對$id 做基本檢誤
+	$id = (int) $id;
+	
+	//產生SQL
+	$sql = "delete from comment where id=$id;";
+	return mysqli_query($conn, $sql); //執行SQL
+}
 ?>

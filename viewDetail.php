@@ -50,7 +50,8 @@ echo "<hr>";
 
 $results=getComment($bkID);
 while (	$rs=mysqli_fetch_array($results)) {
-	echo $rs['msg'],$rs['userName'],"<br>";
+	echo $rs['msg'],$rs['userName'],
+	"<a href ='control.php?act=deleteComment&id=",$rs['id'],"'>deltet</a><br>";
 }
 ?>
 <hr><form method="post" action="control.php">

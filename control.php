@@ -34,6 +34,12 @@ case 'insertComment':
 	$msg=$_REQUEST['msg'];
 	insertComment($bkID, $msg, $_SESSION['uID']);
 	break;
+case 'deleteComment':
+	$id = (int) $_REQUEST['id'];
+	if ($id > 0) {
+		deleteComment($id);
+	}
+	break;
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
