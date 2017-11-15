@@ -26,7 +26,7 @@ function checkUP($userName,$passWord) {
 function isAdmin($uID){
 	global $conn;
 	$uid=(int)$uID;
-	$sql = "SELECT role FROM user WHERE uID=$uID"; //產生SQL指令
+	$sql = "SELECT role FROM user WHERE id=$uID"; //產生SQL指令
 	if ($result = mysqli_query($conn,$sql)) { //執行SQL查詢
 		if ($row=mysqli_fetch_assoc($result)) {
 			if ($row['role'] == 999) 
