@@ -23,5 +23,8 @@ function checkUP($userName,$passWord) {
 	}
 }
 
+function isAdmin($uID){
+	return false;
+}
 
 ?>

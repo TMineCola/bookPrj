@@ -30,6 +30,7 @@ if ( ! isset($_SESSION['uID']) or $_SESSION['uID'] <= 0) {
   </tr>
 <?php
 require("model.php");
+require_once('loginModel.php');
 $bkID=(int)$_REQUEST['id'];
 $results = getBookDetail($bkID);
 
@@ -50,8 +51,10 @@ echo "<hr>";
 
 $results=getComment($bkID);
 while (	$rs=mysqli_fetch_array($results)) {
-	echo $rs['msg'],$rs['userName'],
-	"<a href ='control.php?act=deleteComment&id=",$rs['id'],"'>deltet</a><br>";
+	if (isAdmin($_SESSION['uID'])) {
+		echo "<a href ='control.php?act=deleteComment&id=",$rs['id'],"'>deltet</a>";
+	}
+	echo $rs['msg'],$rs['userName'], "<br>";
 }
 ?>
 <hr><form method="post" action="control.php">
