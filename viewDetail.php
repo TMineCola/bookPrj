@@ -30,42 +30,38 @@ if ( ! isset($_SESSION['uID']) or $_SESSION['uID'] <= 0) {
   </tr>
 <?php
 require_once("model.php");
-$results=getBookList();
+$bkID=$_REQUEST['id'];
+$results=getBookDtail($bkID);
 
-while (	$rs=mysqli_fetch_array($results)) {
+if (	$rs=mysqli_fetch_array($results)) {
 
 	echo "<tr><td>" , $rs['id'] ,
 	"<a href='control.php?act=delete&id=",$rs['id'] ,"'>砍</a> | ",
 	"<a href='editMessageForm.php?id=",$rs['id'] ,"'>改</a> | ",
 	"<a href='control.php?act=like&id=",$rs['id'] ,"'>Like</a> | ",
-	"<a href='viewDetail.php?id=",$rs['id'] ,"'>View Detail</a> | ",
 	"</td><td>" , $rs['title'],
 	"</td><td>" , $rs['msg'],
-	"</td><td>", $rs['author'],
-	"</td><td>", $rs['name'],
-	"</td><td>(", $rs['push'], ")</td></td></tr>";
+	"<td>", $rs['author'],
+	"<td>", $rs['name'],
+	"<td>(", $rs['push'], ")</td></td></tr>";
+}
+
+echo "<hr>";
+
+$results=getComment($bkID);
+while (	$rs=mysqli_fetch_array($results)) {
+	echo $rs['msg'],$rs['userName'],"<br>";
 }
 ?>
-
-  <tr><form method="post" action="control.php">
-    <td><label>
+<hr><form method="post" action="control.php">
+    <label>
       <input type="submit" name="Submit" value="新增" />
-      <input name="act" type="hidden" value='insert' />
-    </label></td>
-    <td><label>
-      <input name="title" type="text" id="title" />
-    </label></td>
-    <td><label>
+      <input name="bkID" type="hidden" value='<?php echo $bkID;?>' />
+      <input name="act" type="hidden" value='insertComment' />
+    </label>
+    <label>
       <input name="msg" type="text" id="msg" />
-    </label></td>
-   <td><label>
-      <input name="author" type="text"  />
-    </label></td>
-    <td><label>
-      <input name="myname" type="hidden" id="myname" value='<?php echo $_SESSION['uID']; ?>' />
-    </label></td>
+    </label>
 	</form>
-  </tr>
-</table>
 </body>
 </html>
