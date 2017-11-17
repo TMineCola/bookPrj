@@ -12,7 +12,7 @@
 ```
 本專案採MVC架構 （Model–view–controller），在軟體設計中可以簡化架構複雜度，讓修改或新增新功能都能夠更簡易的進行。
     Model -> 功能(函式庫)
-    Controller -> 負責處理 Request 並對應請求呼叫相關的函式功能
+    Controller -> 負責處理Request並對應請求呼叫相關的函式功能
     View -> 使用者看得到的介面
 ```
 
