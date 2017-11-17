@@ -1,107 +1,140 @@
 <?php
     require("dbconnect.php");
 
+/*
+    任何function裡面要取用與SQL連線的變數 $conn 一定要先以全域變數宣告 global $conn
+    針對id類的安全檢查通常只要強制轉型為int即可 (int)id
+
+    SQL的執行方式：
+    先將sql指令以字串的方式存在變數中, 例如: $sql = "SELECT * from book";
+    透過mysqli_query(連線物件, SQL指令)來執行, 例如: mysqli_query($conn, $sql);
+
+    SQL指令過濾的方式：
+    mysqli_real_escape_string(連線物件, 欲過濾的變數);
+    例如: mysqli_real_escape_string($conn, $title);
+*/
+
+    //列出全部書單
     function getBookList() {
         global $conn;
-        //$sql = "select * from guestbook;";
+        //選取所有推薦書單資訊 (由於書單資訊記載的推薦人是以編號(id), 所以還要額外從user資料表中搜尋user.id對應的暱稱)
         $sql = "SELECT book.*, user.name FROM book, user WHERE book.uID=user.id";
-
+        //執行SQL指令並將結果回傳
         return mysqli_query($conn, $sql);
     }
 
+    //刪除指定編號(id)的推薦書單
     function deleteBook($id) {
         global $conn;
 
-        //對$id 做基本檢誤
+        //對id做基本錯誤檢查(強制轉成數字)
         $id = (int) $id;
 
-        //產生SQL
+        //將該id的推薦書單從book資料表中刪除
         $sql = "DELETE FROM book WHERE id = $id;";
-        return mysqli_query($conn, $sql); //執行SQL
+        //執行SQL指令並將結果回傳
+        return mysqli_query($conn, $sql);
     }
 
-
+    //新增一個推薦書單, (書名, 推薦訊息, 作者, 推薦人)
     function insertBook($title='', $msg='', $author='', $uID) {
         global $conn;
 
+        //檢查書名是否為空, 如果空則回傳false
         if ($title > ' ') {
-            //基本安全處理
-            $title=mysqli_real_escape_string($conn, $title);
-            $msg=mysqli_real_escape_string($conn, $msg);
-            $author=mysqli_real_escape_string($conn, $author);
-            $uID=(int)$uID;
+            //基本安全處理(防SQL injection)
+            $title = mysqli_real_escape_string($conn, $title);
+            $msg = mysqli_real_escape_string($conn, $msg);
+            $author = mysqli_real_escape_string($conn, $author);
+            $uID = (int)$uID;
 
-            //Generate SQL
+            //新增一筆推薦書單進book資料表
             $sql = "INSERT INTO book (title, msg, author, uID) VALUES ('$title', '$msg','$author', $uID);";
-            return mysqli_query($conn, $sql); //執行SQL
+            //執行SQL指令並將結果回傳
+            return mysqli_query($conn, $sql);
         } else return false;
     }
 
+    //獲得指定編號(id)的推薦書單
     function getBookDetail($id) {
         global $conn;
-        if($id >0 ) {
-            $sql = "SELECT book.*, user.name FROM book, user WHERE book.uID=user.id AND book.id=$id;";
-            $result=mysqli_query($conn,$sql) or die("DB Error: Cannot retrieve message."); //執行SQL查詢
+        //簡易的防錯誤(推薦書單編號一定大於0)
+        if($id > 0) {
+            //選取指定編號(id)推薦書單的全部內容
+            $sql = "SELECT book.*, user.name FROM book, user WHERE book.uID=user.id AND book.id = $id";
+            //將搜尋結果回傳
+            $result = mysqli_query($conn,$sql) or die("DB Error: Cannot retrieve message."); //執行SQL查詢
         } else {
+            //若錯誤則以false回傳
             $result = false;
         }
         return $result;
     }
 
-    function updateMsg($id, $title, $msg, $author) {
+    //修改指定編號(id)的推薦書單 (推薦書單編號, 書名, 推薦訊息, 作者)
+    function updateBook($id, $title, $msg, $author) {
         global $conn;
-        $title=mysqli_real_escape_string($conn,$title);
-        $msg=mysqli_real_escape_string($conn,$msg);
-        $author=mysqli_real_escape_string($conn,$author);
+        //基本安全處理(防SQL injection)
+        $title = mysqli_real_escape_string($conn,$title);
+        $msg = mysqli_real_escape_string($conn,$msg);
+        $author = mysqli_real_escape_string($conn,$author);
+        //對id做基本錯誤檢查(強制轉成數字)
         $id = (int)$id;
 
-        if ($title and $id) { //if title is not empty
-            $sql = "UPDATE book SET title='$title', msg='$msg', author='$author' WHERE id=$id;";
-            mysqli_query($conn, $sql) or die("Insert failed, SQL query error"); //執行SQL
+        //檢查title及id不為空
+        if ($title and $id) {
+            //將參數帶入SQL指令
+            $sql = "UPDATE book SET title='$title', msg='$msg', author='$author' WHERE id = $id";
+            //執行SQL指令, 如果失敗則顯示修改失敗
+            mysqli_query($conn, $sql) or die("Insert failed, SQL query error");
         }
     }
 
+    //針對指定編號(id)的推薦書單按讚
     function likeBook($id) {
         global $conn;
 
-        //對$id 做基本檢誤
+        //對id做基本錯誤檢查(強制轉成數字)
         $id = (int) $id;
 
-        //產生SQL
-        $sql = "UPDATE book SET push = push + 1 WHERE id=$id;";
-        return mysqli_query($conn, $sql); //執行SQL
+        //將指定編號(id)原本的讚數 + 1
+        $sql = "UPDATE book SET push = push + 1 WHERE id = $id;";
+        //執行SQL指令
+        return mysqli_query($conn, $sql);
     }
 
     function insertComment($bkID, $msg, $uID) {
         global $conn;
 
         if ($msg > ' ') {
-            //基本安全處理
-            $bkID=(int) $bkID;
-            $msg=mysqli_real_escape_string($conn, $msg);
-            $uID=(int)$uID;
+            //對bkID做基本錯誤檢查(強制轉成數字)
+            $bkID = (int) $bkID;
+            //基本安全處理(防SQL injection)
+            $msg = mysqli_real_escape_string($conn, $msg);
+            //對uID做基本錯誤檢查(強制轉成數字)
+            $uID = (int)$uID;
 
-            //Generate SQL
+            //插入新的回應
             $sql = "INSERT INTO comment (bkID, msg, uID) VALUES ($bkID, '$msg',$uID);";
-            return mysqli_query($conn, $sql); //執行SQL
+            //執行SQL指令
+            return mysqli_query($conn, $sql);
         } else return false;
     }
 
     function getComment($bkID) {
         global $conn;
+        //選取"對應推薦書單ID的回應", 將使用者名稱以 userName欄位顯示
         $sql = "SELECT comment.*, user.name AS userName FROM comment, user WHERE comment.uID = user.id AND comment.bkID = $bkID";
-
         return mysqli_query($conn, $sql);
     }
 
     function deleteComment($id) {
         global $conn;
-
-        //對$id 做基本檢誤
+        //對id做基本錯誤檢查(強制轉成數字)
         $id = (int) $id;
-
-        //產生SQL
-        $sql = "DELETE FROM comment WHERE id=$id;";
-        return mysqli_query($conn, $sql); //執行SQL
+        //針對指定編號(id)的回應進行刪除
+        $sql = "DELETE FROM comment WHERE id = $id";
+        //執行SQL指令
+        return mysqli_query($conn, $sql);
     }
 ?>
