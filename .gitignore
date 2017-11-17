@@ -1,5 +1,5 @@
-# 此檔案用來使git取消追蹤哪些檔案
+# use to untrack some file
 
-# 忽略dbconnect.php, 以外db連線資訊外洩
+# ignore dbconnect.php, because of db security
 
 dbconnect.php
