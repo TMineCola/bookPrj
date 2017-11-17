@@ -1,19 +1,23 @@
 <?php
+    session_start();
     require_once('loginModel.php');
     $action =$_REQUEST['act'];
 
     switch ($action) {
         case 'login':
-            $userName = $_POST['id']; //取得從HTML表單傳來之POST參數
+            //取得從loginForm.php傳來的POST帳號密碼參數
+            $userName = $_POST['id'];
             $passWord = $_POST['pwd'];
-
-            if ($id = checkUP($userName,$passWord)) { //比對密碼
-                    $_SESSION['uID'] = $id; //若正確－－＞將userID存在session變數中，作為登入成功之記號
-                    header('Location: view.php');
+            //比對密碼
+            if ($id = checkUP($userName,$passWord)) {
+                 //若正確則將userID存在session變數中，作為登入成功之記號
+                $_SESSION['uID'] = $id;
+                //導向書單瀏覽頁面
+                header('Location: view.php');
             } else {
-                //print error message
-                echo "Invalid Username or Password - Please try again <br />";
-                echo '<a href="loginForm.php">Login again</a> ';
+                //顯示錯誤訊息
+                echo "無效的使用者帳號密碼, 請重試 <br />";
+                echo "<a href=\"loginForm.php\">重新登入</a>";
             }
             break;
     }
