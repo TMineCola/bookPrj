@@ -1,0 +1,4 @@
+# 此檔案用來使git取消追蹤哪些檔案
+
+# 忽略dbconnect.php, 以外db連線資訊外洩
+dbconnect.php
