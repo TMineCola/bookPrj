@@ -19,7 +19,7 @@
 ## Debug Q & A
 ### Q1:
 ```
-Warning: mysqli_connect(): (HY000/1045): **Access denied for user 'root'@'localhost' (using password: YES)** in /Applications/XAMPP/xamppfiles/htdocs/Mid/**dbconnect.php** on line 11
+Warning: mysqli_connect(): (HY000/1045): __Access denied for user 'root'@'localhost' (using password: YES)__ in /Applications/XAMPP/xamppfiles/htdocs/Mid/**dbconnect.php** on line 11
 Error with MySQL connection
 ```
 ### A1:
