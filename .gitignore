@@ -1,5 +1,1 @@
-# use to untrack some file
-
-# ignore dbconnect.php, because of db security
-
 dbconnect.php
