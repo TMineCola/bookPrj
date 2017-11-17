@@ -1,6 +1,5 @@
 <?php
     require("dbconnect.php");
-
 /*
     任何function裡面要取用與SQL連線的變數 $conn 一定要先以全域變數宣告 global $conn
     針對id類的安全檢查通常只要強制轉型為int即可 (int)id
@@ -13,7 +12,6 @@
     mysqli_real_escape_string(連線物件, 欲過濾的變數);
     例如: mysqli_real_escape_string($conn, $title);
 */
-
     //列出全部書單
     function getBookList() {
         global $conn;
@@ -26,10 +24,8 @@
     //刪除指定編號(id)的推薦書單
     function deleteBook($id) {
         global $conn;
-
         //對id做基本錯誤檢查(強制轉成數字)
         $id = (int) $id;
-
         //將該id的推薦書單從book資料表中刪除
         $sql = "DELETE FROM book WHERE id = $id;";
         //執行SQL指令並將結果回傳
@@ -39,7 +35,6 @@
     //新增一個推薦書單, (書名, 推薦訊息, 作者, 推薦人)
     function insertBook($title='', $msg='', $author='', $uID) {
         global $conn;
-
         //檢查書名是否為空, 如果空則回傳false
         if ($title > ' ') {
             //基本安全處理(防SQL injection)
@@ -47,7 +42,6 @@
             $msg = mysqli_real_escape_string($conn, $msg);
             $author = mysqli_real_escape_string($conn, $author);
             $uID = (int)$uID;
-
             //新增一筆推薦書單進book資料表
             $sql = "INSERT INTO book (title, msg, author, uID) VALUES ('$title', '$msg','$author', $uID);";
             //執行SQL指令並將結果回傳
@@ -93,10 +87,8 @@
     //針對指定編號(id)的推薦書單按讚
     function likeBook($id) {
         global $conn;
-
         //對id做基本錯誤檢查(強制轉成數字)
         $id = (int) $id;
-
         //將指定編號(id)原本的讚數 + 1
         $sql = "UPDATE book SET push = push + 1 WHERE id = $id;";
         //執行SQL指令
@@ -113,7 +105,6 @@
             $msg = mysqli_real_escape_string($conn, $msg);
             //對uID做基本錯誤檢查(強制轉成數字)
             $uID = (int)$uID;
-
             //插入新的回應
             $sql = "INSERT INTO comment (bkID, msg, uID) VALUES ($bkID, '$msg',$uID);";
             //執行SQL指令
