@@ -1,16 +1,21 @@
 <?php
     session_start();
     require("dbconnect.php");
-    $id = (int)$_GET['id'];
+    //下方用法等同於 $id = (int)$_GET['id']; , _REQUEST的好處是不管是POST或GET的資料都會在這個變數陣列裡面
+    //將GET請求中帶的推薦書單編號(id)存入變數，方便後面顯示取用
     $id = (int)$_REQUEST['id'];
-    $sql = "SELECT * FROM guestbook WHERE id=$id;";
-    $result=mysqli_query($conn,$sql) or die("DB Error: Cannot retrieve message."); //執行SQL查詢
-    if ($rs=mysqli_fetch_assoc($result)) {
+    //選出該編號(id)的推薦書單資訊
+    $sql = "SELECT * FROM book WHERE id = $id;";
+    //執行SQL指令, 失敗則顯示無法獲取資訊
+    $result=mysqli_query($conn,$sql) or die("DB Error: Cannot retrieve message.");
+    if($rs = mysqli_fetch_assoc($result)) {
+        //如果有資料則將書名、推薦訊息、作者存入變數，方便後面顯示取用
         $title = $rs['title'];
-        $msg=$rs['msg'];
-        $name = $rs['name'];
+        $msg = $rs['msg'];
+        $author = $rs['author'];
     } else {
-        echo "Your id is wrong!!";
+        //搜尋不到資訊時, (return row = 0)
+        echo "錯誤的推薦書單編號(id)";
         exit(0);
     }
 ?>
@@ -18,21 +23,22 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>無標題文件</title>
+        <title>推薦書單系統</title>
     </head>
     <body>
-        <h1>edit Message: #<?php echo $id;?></h1>
+        <!-- 將推薦書單編號(id)顯示 -->
+        <h1>編輯推薦書單: #<?php echo $id;?></h1>
         <form method="post" action="control.php?act=update">
+            <!-- 將推薦書單的編號(id)以隱藏的input元素藏在Form裡面送出 -->
             <input type="hidden" name='id' value="<?php echo $id;?>">
+            <!-- 將書名帶入input的value中 -->
             Message Title: <input name="title" type="text" id="title" value="<?php echo $title;?>" /> <br>
-
+            <!-- 將推薦訊息帶入input的value中 -->
             Message Body: <input name="msg" type="text" id="msg" value="<?php echo $msg;?>" /> <br>
-
-            Author: <input name="myname" type="text" id="myname" value="<?php echo $name;?>" /> <br>
+            <!-- 將作者帶入input的value中 -->
+            Author: <input name="author" type="text" id="author" value="<?php echo $author;?>" /> <br>
 
             <input type="submit" name="Submit" value="送出" />
-            </form>
-        </tr>
-        </table>
+        </form>
     </body>
 </html>
