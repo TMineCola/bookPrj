@@ -17,6 +17,26 @@
 ```
 
 ## Debug Q & A
+### Q1:
+```
+Warning: mysqli_connect(): (HY000/1045): **Access denied for user 'root'@'localhost' (using password: YES)** in /Applications/XAMPP/xamppfiles/htdocs/Mid/**dbconnect.php** on line 11
+Error with MySQL connection
+```
+### A1:
+```
+[dbconnect.php] 使用者的帳號或密碼錯誤, 到 phpmyadmin 檢查看看使用者帳號及密碼有沒有輸入正確(也可以重設密碼)
+```
+---
+### Q2:
+```
+Warning: mysqli_connect(): (HY000/1049): **Unknown database 'XXXX'** in /Applications/XAMPP/xamppfiles/htdocs/Mid/**dbconnect.php** on line 11
+Error with MySQL connection
+```
+### A2:
+```
+[dbconnect.php] 資料庫設定錯誤, 去檢查檔案裡面 db = '';的位置是不是設定到正確的DB
+```
+
 
 ## Contributors
 - Project Owner sdbook (via Fork)
