@@ -4,7 +4,7 @@
 ## How to Install
 1. Clone到你的本機
 2. 打開XAMPP
-3. 將.sql檔案匯入DB, (請先點選一個DB再按上方“匯入”選取.sql檔上傳至資料庫)
+3. 將SQL資料中的.sql檔案匯入DB, (請先點選一個DB再按上方“匯入”選取.sql檔上傳至資料庫)
 4. 設定SQL連線資訊 (dbconnect.php)
 5. 打開網頁輸入127.0.0.1
 
