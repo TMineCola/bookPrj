@@ -18,7 +18,7 @@
         <title>推薦書單系統</title>
     </head>
     <body>
-        <p>所有推薦書單瀏覽&nbsp;&nbsp;[<a href='loginForm.php'>點擊登出</a>]</p>
+        <p>所有推薦書單瀏覽&nbsp;&nbsp;[<a href='loginForm.php'>點擊登出</a>]&nbsp;&nbsp;[<a href='viewSelf.php'>我的個人推薦書單</a>]</p>
         <hr />
         <table width="800" border="1">
         <tr>

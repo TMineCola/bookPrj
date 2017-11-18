@@ -16,7 +16,15 @@
     function getBookList() {
         global $conn;
         //選取所有推薦書單資訊 (由於書單資訊記載的推薦人是以編號(id), 所以還要額外從user資料表中搜尋user.id對應的暱稱)
-        $sql = "SELECT book.*, user.name FROM book, user WHERE book.uID=user.id";
+        $sql = "SELECT book.*, user.name FROM book, user WHERE book.uID = user.id";
+        //執行SQL指令並將結果回傳
+        return mysqli_query($conn, $sql);
+    }
+
+    function getSelfBookList($uID) {
+        global $conn;
+        //選取目前登入使用者(uID)所有的推薦書單資訊 (由於書單資訊記載的推薦人是以編號(id), 所以還要額外從user資料表中搜尋user.id對應的暱稱)
+        $sql = "SELECT book.*, user.name FROM book, user WHERE book.uID = user.id AND book.uID = $uID";
         //執行SQL指令並將結果回傳
         return mysqli_query($conn, $sql);
     }
