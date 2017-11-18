@@ -42,6 +42,14 @@
                 likeBook($id);
             }
             break;
+        case 'unlike':
+            //從請求中讀取id ,對id做基本錯誤檢查(強制轉成數字)
+            $id = (int) $_REQUEST['id'];
+            //基本錯誤檢查, 正常id一定會 > 0
+            if ($id > 0) {
+                unlikeBook($id);
+            }
+            break;
         case 'insertComment':
             //從請求中讀取bkID ,對bkID做基本錯誤檢查(強制轉成數字)
             $bkID = (int)$_REQUEST['bkID'];

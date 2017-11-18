@@ -95,6 +95,17 @@
         return mysqli_query($conn, $sql);
     }
 
+    //針對指定編號(id)的推薦書單按噓
+    function unlikeBook($id) {
+        global $conn;
+        //對id做基本錯誤檢查(強制轉成數字)
+        $id = (int) $id;
+        //將指定編號(id)原本的讚數 - 1
+        $sql = "UPDATE book SET push = push - 1 WHERE id = $id;";
+        //執行SQL指令
+        return mysqli_query($conn, $sql);
+    }
+
     function insertComment($bkID, $msg, $uID) {
         global $conn;
 
