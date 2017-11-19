@@ -66,7 +66,7 @@
             while ($rs = mysqli_fetch_array($results)) {
                 //顯示回應訊息及回應者
                 echo "<tr><td>",$rs['msg'],"</td><td>",$rs['userName'];
-                //呼叫model.php裡面的isAdmin函式, 檢查該登入帳號是否為管理員
+                //呼叫loginmodel.php裡面的isAdmin函式, 檢查該登入帳號是否為管理員
                 //如果是則顯示刪除回應的連結
                 if (isAdmin($_SESSION['uID'])) {
                     echo "<a href ='control.php?act=deleteComment&id=",$rs['id'],"'>[刪除回應]</a></td></tr>";
