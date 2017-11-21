@@ -20,7 +20,7 @@
             //從請求中讀取資料
             $title = $_REQUEST['title'];
             $msg = $_REQUEST['msg'];
-            $name = $_REQUEST['myname'];
+            $name = $_REQUEST['author'];
             //新增推薦書單
             insertBook($title, $msg, $name, $_SESSION['uID']);
             break;
