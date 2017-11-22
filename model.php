@@ -16,7 +16,7 @@
     function getBookList() {
         global $conn;
         //選取所有推薦書單資訊 (由於書單資訊記載的推薦人是以編號(id), 所以還要額外從user資料表中搜尋user.id對應的暱稱)
-        $sql = "SELECT book.*, user.name FROM book, user WHERE book.uID = user.id";
+        $sql = "SELECT book.*, user.name FROM book, user WHERE book.uID = user.id ORDER BY push DESC";
         //執行SQL指令並將結果回傳
         return mysqli_query($conn, $sql);
     }
@@ -41,7 +41,7 @@
     }
 
     //新增一個推薦書單, (書名, 推薦訊息, 作者, 推薦人)
-    function insertBook($title='', $msg='', $author='', $uID) {
+    function insertBook($title='', $msg='', $author='', $language='0',$uID) {
         global $conn;
         //檢查書名是否為空, 如果空則回傳false
         if ($title > ' ') {
@@ -49,9 +49,10 @@
             $title = mysqli_real_escape_string($conn, $title);
             $msg = mysqli_real_escape_string($conn, $msg);
             $author = mysqli_real_escape_string($conn, $author);
+            $language = mysqli_real_escape_string($conn, $language);
             $uID = (int)$uID;
             //新增一筆推薦書單進book資料表
-            $sql = "INSERT INTO book (title, msg, author, uID) VALUES ('$title', '$msg','$author', $uID);";
+            $sql = "INSERT INTO book (title, msg, author, language, uID) VALUES ('$title', '$msg','$author', '$language', $uID);";
             //執行SQL指令並將結果回傳
             return mysqli_query($conn, $sql);
         } else return false;
@@ -74,44 +75,81 @@
     }
 
     //修改指定編號(id)的推薦書單 (推薦書單編號, 書名, 推薦訊息, 作者)
-    function updateBook($id, $title, $msg, $author) {
+    function updateBook($id, $title, $msg, $language, $author) {
         global $conn;
         //基本安全處理(防SQL injection)
         $title = mysqli_real_escape_string($conn,$title);
         $msg = mysqli_real_escape_string($conn,$msg);
         $author = mysqli_real_escape_string($conn,$author);
+        $language = mysqli_real_escape_string($conn, $language);
         //對id做基本錯誤檢查(強制轉成數字)
         $id = (int)$id;
 
         //檢查title及id不為空
         if ($title and $id) {
             //將參數帶入SQL指令
-            $sql = "UPDATE book SET title='$title', msg='$msg', author='$author' WHERE id = $id";
+            $sql = "UPDATE book SET title='$title', msg='$msg', author='$author', language='$language' WHERE id = $id";
             //執行SQL指令, 如果失敗則顯示修改失敗
             mysqli_query($conn, $sql) or die("Insert failed, SQL query error");
         }
     }
 
     //針對指定編號(id)的推薦書單按讚
-    function likeBook($id) {
+    function likeBook($uID, $bkID) {
         global $conn;
         //對id做基本錯誤檢查(強制轉成數字)
-        $id = (int) $id;
+        $bkID = (int) $bkID;
+        $uID = (int) $uID;
+        $logsql = "INSERT INTO push (uID,bkID) VALUES ('$uID', '$bkID')";
+        mysqli_query($conn, $logsql);
         //將指定編號(id)原本的讚數 + 1
-        $sql = "UPDATE book SET push = push + 1 WHERE id = $id;";
+        $sql = "UPDATE book SET push = push + 1 WHERE id = $bkID;";
         //執行SQL指令
         return mysqli_query($conn, $sql);
     }
 
     //針對指定編號(id)的推薦書單按噓
-    function unlikeBook($id) {
+    function unlikeBook($uID, $bkID) {
         global $conn;
         //對id做基本錯誤檢查(強制轉成數字)
-        $id = (int) $id;
+        $bkID = (int) $bkID;
+        $uID = (int) $uID;
+        $logsql = "INSERT INTO unpush (uID,bkID) VALUES ('$uID', '$bkID')";
+        mysqli_query($conn, $logsql);
         //將指定編號(id)原本的讚數 - 1
-        $sql = "UPDATE book SET push = push - 1 WHERE id = $id;";
+        $sql = "UPDATE book SET push = push - 1 WHERE id = $bkID;";
         //執行SQL指令
         return mysqli_query($conn, $sql);
+    }
+
+    function notPush($uID, $bkID) {
+        global $conn;
+        //對id做基本錯誤檢查(強制轉成數字)
+        $bkID = (int) $bkID;
+        $uID = (int) $uID;
+        $sql = "SELECT number FROM push WHERE bkID = $bkID AND uID = $uID";
+        $result = mysqli_query($conn, $sql);
+        if ($row = mysqli_fetch_assoc($result)) {
+            echo "你已經推過了！<br>";
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    function notunPush($uID, $bkID) {
+        global $conn;
+        //對id做基本錯誤檢查(強制轉成數字)
+        $bkID = (int) $bkID;
+        $uID = (int) $uID;
+        $sql = "SELECT number FROM unpush WHERE bkID = $bkID AND uID = $uID";
+        $result = mysqli_query($conn, $sql);
+        if ($row = mysqli_fetch_assoc($result)) {
+            echo "你已經噓過了！<br>";
+            return false;
+        } else {
+            return true;
+        }
     }
 
     function insertComment($bkID, $msg, $uID) {
@@ -144,6 +182,16 @@
         $id = (int) $id;
         //針對指定編號(id)的回應進行刪除
         $sql = "DELETE FROM comment WHERE id = $id";
+        //執行SQL指令
+        return mysqli_query($conn, $sql);
+    }
+
+    function addSeen($id) {
+        global $conn;
+        //對id做基本錯誤檢查(強制轉成數字)
+        $id = (int) $id;
+        //針對指定編號(id)的回應進行刪除
+        $sql = "UPDATE book SET seen = seen + 1 WHERE id = $id";
         //執行SQL指令
         return mysqli_query($conn, $sql);
     }

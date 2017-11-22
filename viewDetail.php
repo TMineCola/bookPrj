@@ -29,6 +29,8 @@
             <td>作者</td>
             <td>推薦者</td>
             <td>按讚數</td>
+            <td>語言</td>
+            <td>瀏覽次數</td>
         </tr>
 
         <?php
@@ -36,6 +38,7 @@
             $bkID = (int)$_REQUEST['id'];
             //呼叫model.php裡面的getBookDetail函式, 並將回傳的結果存到results
             //回傳內容為：該編號的推薦書單內容
+            addSeen($bkID);
             $results = getBookDetail($bkID);
 
             //將回傳內容顯示, Usage: $rs['欄位名稱']
@@ -49,9 +52,25 @@
                 "<a href='control.php?act=unlike&id=",$rs['id'] ,"'>噓</a> | ",
                 "</td><td>" , $rs['title'],
                 "</td><td>" , $rs['msg'],
-                "<td>", $rs['author'],
-                "<td>", $rs['name'],
-                "<td>(", $rs['push'], ")</td></td></tr></table>";
+                "</td><td>", $rs['author'],
+                "</td><td>", $rs['name'],
+                "</td><td>(", $rs['push'], ")<td>";
+                switch($rs['language']) {
+                    case 0:
+                        echo "中";
+                        break;
+                    case 1:
+                        echo "英";
+                        break;
+                    case 2:
+                        echo "日";
+                        break;
+                    case 3:
+                        echo "其他";
+                        break;
+                }
+                echo "</td><td>", $rs['seen'],
+                "</td></tr></table>";
             } else {
                 echo "<h4>找不到該推薦書單</h4></table>";
             }

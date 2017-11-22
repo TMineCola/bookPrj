@@ -18,16 +18,17 @@
         <title>推薦書單系統</title>
     </head>
     <body>
-        <p>所有推薦書單瀏覽&nbsp;&nbsp;[<a href='loginForm.php'>點擊登出</a>]&nbsp;&nbsp;[<a href='viewSelf.php'>我的個人推薦書單</a>]</p>
+        <p>所有推薦書單瀏覽&nbsp;&nbsp;[<a href='loginForm.php'>點擊登出</a>]&nbsp;&nbsp;[<a href='viewSelf.php?uID=<?php echo $_SESSION['uID']; ?>'>我的個人推薦書單</a>]</p>
         <hr />
-        <table width="800" border="1">
+        <table width="850" border="1">
         <tr>
             <td>編號</td>
             <td>書名</td>
-            <td>推薦訊息</td>
             <td>作者</td>
-            <td>推薦者</td>
             <td>按讚數</td>
+            <td>推薦者</td>
+            <td>語言</td>
+            <td>操作</td>
         </tr>
         <?php
             //呼叫model.php裡面的getBookList函式, 並將回傳的結果存到results
@@ -38,16 +39,30 @@
             //請記得使用 "," 將字串及變數分開
             while ($rs = mysqli_fetch_array($results)) {
                 echo "<tr><td>" , $rs['id'] ,"<br />",
-                "<a href='control.php?act=delete&id=",$rs['id'] ,"'>砍</a> | ",
+                "</td><td>" , $rs['title'],
+                "</td><td>", $rs['author'],
+                "</td><td>(", $rs['push'], ")",
+                "</td><td><a href='viewSelf.php?uID=", $rs['uID'], "'>",$rs['name'], "</a>",
+                "</td><td>";
+                switch($rs['language']) {
+                    case 0:
+                        echo "中";
+                        break;
+                    case 1:
+                        echo "英";
+                        break;
+                    case 2:
+                        echo "日";
+                        break;
+                    case 3:
+                        echo "其他";
+                        break;
+                }
+                echo "</td><td><a href='control.php?act=delete&id=",$rs['id'] ,"'>砍</a> | ",
                 "<a href='editMessageForm.php?id=",$rs['id'] ,"'>改</a> | ",
                 "<a href='control.php?act=like&id=",$rs['id'] ,"'>推</a> | ",
                 "<a href='control.php?act=unlike&id=",$rs['id'] ,"'>噓</a> | ",
-                "<a href='viewDetail.php?id=",$rs['id'] ,"'>View Detail</a>",
-                "</td><td>" , $rs['title'],
-                "</td><td>" , $rs['msg'],
-                "</td><td>", $rs['author'],
-                "</td><td>", $rs['name'],
-                "</td><td>(", $rs['push'], ")</td></td></tr>";
+                "<a href='viewDetail.php?id=",$rs['id'] ,"'>View Detail</a></td></tr>";
             }
         ?>
 
@@ -74,6 +89,15 @@
                     <label>
                         <input name="author" type="text"  />
                     </label>
+                </td>
+                <td>
+                    語言
+                    <select name="language">
+                        <option value="0"> 中 </option>
+                        <option value="1"> 英 </option>
+                        <option value="2"> 日 </option>
+                        <option value="3"> 其他 </option>
+                    </select>
                 </td>
                 <td colspan="2">
                     <label>

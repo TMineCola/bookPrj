@@ -21,8 +21,9 @@
             $title = $_REQUEST['title'];
             $msg = $_REQUEST['msg'];
             $name = $_REQUEST['author'];
+            $language = $_REQUEST['language'];
             //新增推薦書單
-            insertBook($title, $msg, $name, $_SESSION['uID']);
+            insertBook($title, $msg, $name, $language,$_SESSION['uID']);
             break;
         case 'update':
             //從請求中讀取id ,對id做基本錯誤檢查(強制轉成數字)
@@ -31,23 +32,26 @@
             $title = $_REQUEST['title'];
             $msg = $_REQUEST['msg'];
             $author = $_REQUEST['author'];
+            $language = $_REQUEST['language'];
             //修改推薦書單
-            updateBook($id, $title, $msg, $author);
+            updateBook($id, $title, $msg, $language, $author);
             break;
         case 'like':
             //從請求中讀取id ,對id做基本錯誤檢查(強制轉成數字)
-            $id = (int) $_REQUEST['id'];
+            $bkID = (int) $_REQUEST['id'];
+            $uID = (int )$_SESSION['uID'];
             //基本錯誤檢查, 正常id一定會 > 0
-            if ($id > 0) {
-                likeBook($id);
+            if ($bkID > 0 && notPush($uID, $bkID)) {
+                likeBook($uID, $bkID);
             }
             break;
         case 'unlike':
             //從請求中讀取id ,對id做基本錯誤檢查(強制轉成數字)
-            $id = (int) $_REQUEST['id'];
+            $bkID = (int) $_REQUEST['id'];
+            $uID = (int )$_SESSION['uID'];
             //基本錯誤檢查, 正常id一定會 > 0
-            if ($id > 0) {
-                unlikeBook($id);
+            if ($bkID > 0 && notunPush($uID, $bkID)) {
+                unlikeBook($uID, $bkID);
             }
             break;
         case 'insertComment':

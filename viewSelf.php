@@ -29,11 +29,12 @@
             <td>作者</td>
             <td>推薦者</td>
             <td>按讚數</td>
+            <td>語言</td>
         </tr>
         <?php
             //呼叫model.php裡面的getBookList函式, 並將回傳的結果存到results
             //回傳內容為：目前登入使用者所建立的書單
-            $results = getSelfBookList($_SESSION['uID']);
+            $results = getSelfBookList($_GET['uID']);
 
             //將回傳內容逐列顯示, Usage: $rs['欄位名稱']
             //請記得使用 "," 將字串及變數分開
@@ -48,7 +49,23 @@
                 "</td><td>" , $rs['msg'],
                 "</td><td>", $rs['author'],
                 "</td><td>", $rs['name'],
-                "</td><td>(", $rs['push'], ")</td></td></tr>";
+                "</td><td>(", $rs['push'], ")",
+                "</td><td>";
+                switch($rs['language']) {
+                    case 0:
+                        echo "中";
+                        break;
+                    case 1:
+                        echo "英";
+                        break;
+                    case 2:
+                        echo "日";
+                        break;
+                    case 3:
+                        echo "其他";
+                        break;
+                }
+                echo "</td></td></tr>";
             }
         ?>
         </table>

@@ -58,6 +58,7 @@ Notice: A session had already been started - ignoring session_start() in /Applic
 簡單來說假設你今天頁面已經有session_start();如果再次require另外一個包含session_start();就會噴錯
 但是不影響執行結果
 ```
+---
 
 ## Contributors
 - Project Owner sdbook (via Fork)

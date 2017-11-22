@@ -13,6 +13,7 @@
         $title = $rs['title'];
         $msg = $rs['msg'];
         $author = $rs['author'];
+        $language = $rs['language'];
     } else {
         //搜尋不到資訊時, (return row = 0)
         echo "錯誤的推薦書單編號(id)";
@@ -37,6 +38,14 @@
             Message Body: <input name="msg" type="text" id="msg" value="<?php echo $msg;?>" /> <br>
             <!-- 將作者帶入input的value中 -->
             Author: <input name="author" type="text" id="author" value="<?php echo $author;?>" /> <br>
+
+            Language:
+                    <select name="language" id="language">
+                        <option value="0" <?php if($language=="0") echo 'selected="selected"'; ?> > 中 </option>
+                        <option value="1" <?php if($language=="1") echo 'selected="selected"'; ?> > 英 </option>
+                        <option value="2" <?php if($language=="2") echo 'selected="selected"'; ?> > 日 </option>
+                        <option value="3" <?php if($language=="3") echo 'selected="selected"'; ?> > 其他 </option>
+                    </select><br>
 
             <input type="submit" name="Submit" value="送出" />
         </form>
