@@ -11,9 +11,9 @@
 ## Arch of Project
 ```
 本專案採MVC架構 （Model–view–controller），在軟體設計中可以簡化架構複雜度，讓修改或新增新功能都能夠更簡易的進行。
-    Model -> 功能(函式庫)
-    Controller -> 負責處理Request並對應請求呼叫相關的函式功能
-    View -> 使用者看得到的介面
+    Model -> 負責跟DB要求資料
+    Controller -> 負責所有功能及邏輯
+    View -> 使用者看得到的介面
 ```
 ### Login相關
 - [View] loginForm.php: 登入頁面, 將帳密以Post的方式送至loginControl.php處理
@@ -35,7 +35,7 @@ Error with MySQL connection
 ```
 ### A1:
 ```
-[dbconnect.php] 使用者的帳號或密碼錯誤, 到 phpmyadmin 檢查看看使用者帳號及密碼有沒有輸入正確(也可以重設密碼)
+[dbconnect.php] 使用者的帳號或密碼錯誤, 到 ＤＢ 檢查看看使用者帳號及密碼有沒有輸入正確(也可以重設密碼)
 ```
 ---
 ### Q2:
